@@ -76,7 +76,7 @@ const getMyLeagues = async (req, res) => {
     const skip = (page - 1) * numPerPage;
     const limit = skip + ',' + numPerPage;
     if (role > 0 && userid > 0) {
-      const isManagement = role == data.player ? false : true;
+      const isManagement = role == data.user ? false : true;
       let dbData = [];
       if (isManagement) {
         let query = '';
@@ -84,7 +84,7 @@ const getMyLeagues = async (req, res) => {
           query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join users u on u.userid = l.createdby where l.isActive = true order by 1 desc limit ${limit}`
         }
         else if (role == data.admin) {
-          query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join users u on u.userid = l.createdby where l.isActive = true and l.createdby in (select userid from users where roleid in (${data.admin},${data.manager},${data.player})) order by 1 desc limit ${limit}`
+          query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join users u on u.userid = l.createdby where l.isActive = true and l.createdby in (select userid from users where roleid in (${data.admin},${data.manager},${data.user})) order by 1 desc limit ${limit}`
         }
         else if (role == data.manager) {
           query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join users u on u.userid = l.createdby where l.isActive = true and l.createdby = ${userid} order by 1 desc limit ${limit}`
@@ -220,7 +220,7 @@ const createEditLeague = async (req, res) => {
     const role = req.user && req.user.roleid ? req.user.roleid : 0;
     const userid = req.user && req.user.userid ? req.user.userid : 0;
     const { leagueid, leagueName, password } = req.body;
-    if (role > 0 && role != data.player && userid > 0) {
+    if (role > 0 && role != data.user && userid > 0) {
       if (leagueName) {
         if (leagueid) {
           const exist = `select * from leagues where leagueid = ${leagueid} and isactive = true`;

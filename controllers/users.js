@@ -17,7 +17,7 @@ const getUsers = async (req, res) => {
     const page = Number(pageno) || 1;
     const skip = (page - 1) * numPerPage;
     const limit = skip + ',' + numPerPage;
-    if (role > 0 && role != data.player) {
+    if (role > 0 && role != data.user) {
       const defRole = role == data.super_admin ? [data.super_admin, data.admin, data.manager] :
         role == data.admin ? [data.admin, data.manager] :
           role == data.manager ? [data.manager] :
@@ -68,7 +68,7 @@ const getPlayers = async (req, res) => {
     const skip = (page - 1) * numPerPage;
     const limit = skip + ',' + numPerPage;
     if (role > 0) {
-      const defRole = data.player;
+      const defRole = data.user;
       const users = await connectDB.query(`select u.userid, u.roleid, u.userfirstname, u.userlastname, u.email, u.createdon, l.leaguename from users u left join userleagues ul on ul.userid = u.userid left join leagues l on l.leagueid = ul.leagueid where u.isActive = true and roleid in (${defRole}) order by 1 desc limit ${limit}`);
       if (users && users.length > 0) {
         const unique = [...new Set(users.map(x => x.userid))];
@@ -230,7 +230,7 @@ const deleteZombData = async (req, res) => {
         } else return res.status(StatusCodes.CONFLICT).json(constants.dataNotExist);
       }
       else if (entity == constants.deleteEntity.player) {
-        const checkManageQuery = `select * from users where userid = ${row} and isactive = true and roleid = ${data.player}`;
+        const checkManageQuery = `select * from users where userid = ${row} and isactive = true and roleid = ${data.user}`;
         const dbManage = await connectDB.query(checkManageQuery);
         if (dbManage && dbManage.length > 0) {
           if (checkDeleteAuthority(role, dbManage[0].roleid)) {

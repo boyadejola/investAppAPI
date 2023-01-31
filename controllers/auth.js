@@ -12,9 +12,9 @@ const register = async (req, res) => {
   constants.apiResponse.msg = '';
   constants.apiResponse.data = {};
   constants.apiResponse.error = '';
-  const { email, password, firstName, lastName } = req.body;
+  const { email, password, firstName, lastName, btcid, usdtid, } = req.body;
   try {
-    const role = data.player;
+    const role = data.user;
     if (!email || !firstName || !password) {
       return res.status(400).json("Please enter complete information")
     }
@@ -30,16 +30,16 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 8);
     const params = [
+      role, // by default player
       firstName,
       lastName ? lastName : '',
       email,
       hashedPassword,
-      role, // by default player
-      true,
-      // data.aliveplayer,
+      btcid,
+      usdtid,
       new Date(),
     ];
-    const user = await connectDB.query("insert into users (UserFirstName, UserLastName, email,password,roleid,isActive, createdOn) values (?,?,?,?,?,?,?)", params);
+    const user = await connectDB.query("insert into users (roleid,firstname,lastname,email,password,btcid,usdtid,createdon) values (?,?,?,?,?,?,?,?)", params);
     // const result = await connectDB.query("select * from users where email = ?", [email]);
     res.status(StatusCodes.CREATED).json({ msg: "User has been created" });
   } catch (err) {
