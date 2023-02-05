@@ -9,11 +9,11 @@ const {
     withdrawHistory, depositHistory, referralStatistic, transactionHistory, returnInterestLog
 } = require('../controllers/listing')
 
-router.route('/withdrawhistory').get(withdrawHistory)
-router.route('/deposithistory').get(depositHistory)
-router.route('/referralstatistic').get(referralStatistic)
-router.route('/transactionhistory').get(transactionHistory)
-router.route('/returninterestlog').get(returnInterestLog)
+router.route('/withdrawhistory').get(authenticateUser, withdrawHistory)
+router.route('/deposithistory').get(authenticateUser, depositHistory)
+router.route('/referralstatistic').get(authenticateUser, referralStatistic)
+router.route('/transactionhistory').get(authenticateUser, transactionHistory)
+router.route('/returninterestlog').get(authenticateUser,returnInterestLog)
 
 
 module.exports = router;
