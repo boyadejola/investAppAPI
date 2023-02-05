@@ -12,7 +12,7 @@ const register = async (req, res) => {
   constants.apiResponse.msg = '';
   constants.apiResponse.data = {};
   constants.apiResponse.error = '';
-  const { email, password, firstName, lastName, btcid, usdtid, } = req.body;
+  const { email, password, firstName, lastName, btcWallet, usdtWallet, } = req.body;
   try {
     const role = data.user;
     if (!email || !firstName || !password) {
@@ -35,8 +35,8 @@ const register = async (req, res) => {
       lastName ? lastName : '',
       email,
       hashedPassword,
-      btcid,
-      usdtid,
+      btcWallet,
+      usdtWallet,
       new Date(),
     ];
     const user = await connectDB.query("insert into users (roleid,firstname,lastname,email,password,btcid,usdtid,createdon) values (?,?,?,?,?,?,?,?)", params);
