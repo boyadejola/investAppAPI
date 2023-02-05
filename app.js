@@ -14,6 +14,7 @@ const auth = require('./routes/auth')
 const league = require('./routes/league')
 const userpicks = require('./routes/userPicks')
 const users = require('./routes/users')
+const lisitng = require('./routes/listing')
 
 
 //middleware
@@ -64,6 +65,7 @@ app.use('/api/v1/auth', auth)
 app.use('/api/v1', league)
 app.use('/api/v1', userpicks)
 app.use('/api/v1', users)
+app.use('/api/v1/listing', lisitng)
 
 
 app.use(notFoundMiddleware)
