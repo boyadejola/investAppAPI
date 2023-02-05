@@ -35,11 +35,12 @@ const register = async (req, res) => {
       lastName ? lastName : '',
       email,
       hashedPassword,
-      btcWallet,
-      usdtWallet,
+      btcWallet ? btcWallet : '',
+      usdtWallet ? usdtWallet : '',
       new Date(),
+      true,
     ];
-    const user = await connectDB.query("insert into users (roleid,firstname,lastname,email,password,btcid,usdtid,createdon) values (?,?,?,?,?,?,?,?)", params);
+    const user = await connectDB.query("insert into users (roleid,firstname,lastname,email,password,btcid,usdtid,createdon,isactive) values (?,?,?,?,?,?,?,?,?)", params);
     // const result = await connectDB.query("select * from users where email = ?", [email]);
     res.status(StatusCodes.CREATED).json({ msg: "User has been created" });
   } catch (err) {
@@ -75,8 +76,8 @@ const login = async (req, res) => {
     const user = {
       userId: userDB[0].userid,
       role: userDB[0].roleid,
-      firstName: userDB[0].userfirstname,
-      lastName: userDB[0].userlastname,
+      firstName: userDB[0].firstname,
+      lastName: userDB[0].lastname,
       // isAlive: userDB[0].statusid,
       email: userDB[0].email,
     }
