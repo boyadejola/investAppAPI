@@ -23,6 +23,7 @@ const withdrawHistory = async (req, res) => {
             withdrawHistory = await connectDB.query(`select * from withdraw where isActive = true order by withdrawid desc limit ${limit}`);
         }
         constants.apiResponse.code = StatusCodes.OK;
+        constants.apiResponse.totalCount = withdrawHistory && withdrawHistory.length > 0 ? withdrawHistory.length : 0;
         constants.apiResponse.data = withdrawHistory && withdrawHistory.length > 0 ? withdrawHistory : [];
         return res.status(StatusCodes.OK).json(constants.apiResponse);
     }
@@ -52,6 +53,7 @@ const depositHistory = async (req, res) => {
             depositHistory = await connectDB.query(`select * from deposit where isActive = true order by depositid desc limit ${limit}`);
         }
         constants.apiResponse.code = StatusCodes.OK;
+        constants.apiResponse.totalCount = depositHistory && depositHistory.length > 0 ? depositHistory.length : 0;
         constants.apiResponse.data = depositHistory && depositHistory.length > 0 ? depositHistory : [];
         return res.status(StatusCodes.OK).json(constants.apiResponse);
     }
@@ -62,7 +64,6 @@ const depositHistory = async (req, res) => {
         constants.apiResponse.msg = 'api_depositHistory';
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(constants.apiResponse);
     }
-    // res.send('withdraw history')
 }
 
 const transactionHistory = async (req, res) => {
@@ -82,6 +83,7 @@ const transactionHistory = async (req, res) => {
             transactionHistory = await connectDB.query(`select * from transaction where isActive = true order by transactionid desc limit ${limit}`);
         }
         constants.apiResponse.code = StatusCodes.OK;
+        constants.apiResponse.totalCount = transactionHistory && transactionHistory.length > 0 ? transactionHistory.length : 0;
         constants.apiResponse.data = transactionHistory && transactionHistory.length > 0 ? transactionHistory : [];
         return res.status(StatusCodes.OK).json(constants.apiResponse);
     }
@@ -111,6 +113,7 @@ const referralStatistic = async (req, res) => {
             referralStatistic = await connectDB.query(`select * from referrals where isActive = true order by referralid desc limit ${limit}`);
         }
         constants.apiResponse.code = StatusCodes.OK;
+        constants.apiResponse.totalCount = referralStatistic && referralStatistic.length > 0 ? referralStatistic.length : 0;
         constants.apiResponse.data = referralStatistic && referralStatistic.length > 0 ? referralStatistic : [];
         return res.status(StatusCodes.OK).json(constants.apiResponse);
     }
@@ -140,6 +143,7 @@ const returnInterestLog = async (req, res) => {
             returnInterestLog = await connectDB.query(`select * from returninterest where isActive = true order by returninterestid desc limit ${limit}`);
         }
         constants.apiResponse.code = StatusCodes.OK;
+        constants.apiResponse.totalCount = returnInterestLog && returnInterestLog.length > 0 ? returnInterestLog.length : 0;
         constants.apiResponse.data = returnInterestLog && returnInterestLog.length > 0 ? returnInterestLog : [];
         return res.status(StatusCodes.OK).json(constants.apiResponse);
     }
