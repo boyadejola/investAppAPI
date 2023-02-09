@@ -89,6 +89,15 @@ function isEmptyObject(obj) {
   }
 }
 
+function calculateCapitalBack(plan, amount) {
+  let result = 0;
+  if (plan && !isEmptyObject(plan) && amount && amount > 0) {
+    const ratio = plan.ratio ? plan.ratio / 100 : 0;
+    result = amount * ratio;
+  }
+  return result;
+}
+
 module.exports = {
   authenticateUser,
   authorizePermissions,
@@ -96,4 +105,5 @@ module.exports = {
   checkDeleteAuthority,
   extractTeams,
   isEmptyObject,
+  calculateCapitalBack,
 };

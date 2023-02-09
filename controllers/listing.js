@@ -80,7 +80,7 @@ const transactionHistory = async (req, res) => {
         const limit = skip + ',' + numPerPage;
         let transactionHistory = []
         if (userid) {
-            transactionHistory = await connectDB.query(`select * from transaction where isActive = true and userid = ${userid} and isapproved=true order by transactionid desc limit ${limit}`);
+            transactionHistory = await connectDB.query(`select * from transaction where isActive = true and userid = ${userid} order by transactionid desc limit ${limit}`);
         }
         constants.apiResponse.code = StatusCodes.OK;
         constants.apiResponse.totalCount = transactionHistory && transactionHistory.length > 0 ? transactionHistory.length : 0;
@@ -140,7 +140,7 @@ const returnInterestLog = async (req, res) => {
         const limit = skip + ',' + numPerPage;
         let returnInterestLog = []
         if (userid) {
-            returnInterestLog = await connectDB.query(`select * from returninterest where isActive = true and userid = ${userid} and isapproved=true order by returninterestid desc limit ${limit}`);
+            returnInterestLog = await connectDB.query(`select * from returninterest where isActive = true and userid = ${userid} order by returninterestid desc limit ${limit}`);
         }
         constants.apiResponse.code = StatusCodes.OK;
         constants.apiResponse.totalCount = returnInterestLog && returnInterestLog.length > 0 ? returnInterestLog.length : 0;
@@ -230,6 +230,9 @@ const getDashboard = async (req, res) => {
             depositwallet: 0,
             activewallet: 0,
             interestwallet: 0,
+            totaltrades: 0,
+            totaldeposit: 0,
+            totalpayout: 0,
         };
         if (userid) {
             const user = await connectDB.query(`select * from users where userid = ${userid}`);
@@ -237,6 +240,22 @@ const getDashboard = async (req, res) => {
                 dashboard.depositwallet = user[0].depositwallet;
                 dashboard.activewallet = user[0].activewallet;
                 dashboard.interestwallet = user[0].interestwallet;
+            }
+            const userpicks = await connectDB.query(`select * from userplans where userid = ${userid}`);
+            if (userpicks && userpicks.length > 0) {
+                dashboard.totaltrades = userpicks.length;
+            }
+            const deposit = await connectDB.query(`select * from deposit where userid = ${userid} and isapproved=true and isactive=true`);
+            if (deposit && deposit.length > 0) {
+                deposit.map(a => {
+                    dashboard.totaldeposit += parseFloat(a.amount);
+                });
+            }
+            const withdraw = await connectDB.query(`select * from withdraw where userid = ${userid} and isapproved=true and isactive=true`);
+            if (withdraw && withdraw.length > 0) {
+                withdraw.map(a => {
+                    dashboard.totalpayout += parseFloat(a.amount);
+                });
             }
         }
         constants.apiResponse.code = StatusCodes.OK;

@@ -75,6 +75,19 @@ const constraints = {
     eventsperweek: 16,
 }
 
+const plans = {
+    plan1: 1,
+    plan2: 2,
+    plan3: 3,
+    plan3: 4,
+}
+
+const userWallets = {
+    deposit: 1,
+    interest: 2,
+    active: 3,
+}
+
 const constants = {
     apiResponse: apiResponse,
     notAuthorize: notAuthorize,
@@ -86,6 +99,8 @@ const constants = {
     dataNotExist: dataNotExist,
     zeroApiResponse: zeroApiResponse,
     constraints: constraints,
+    plans: plans,
+    userWallets: userWallets,
 }
 
 exports.constants = constants

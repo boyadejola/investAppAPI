@@ -194,5 +194,66 @@ VALUES ('4', 'Pro Plan', '3', '60', '10', '100000', true);
 
 
 --
+ALTER TABLE `veninvest_db`.`userplans` 
+ADD COLUMN `createdon` DATETIME NULL AFTER `isactive`,
+ADD COLUMN `walletid` INT NULL AFTER `planid`;
+
+
+--
+ALTER TABLE `veninvest_db`.`userplans` 
+ADD COLUMN `amount` DECIMAL(10,2) NULL AFTER `walletid`;
+
+
+--
+CREATE TABLE `veninvest_db`.`wallets` (
+  `walletid` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `isactive` TINYINT NULL,
+  PRIMARY KEY (`walletid`));
+
+
+--
+ALTER TABLE `veninvest_db`.`transaction` 
+ADD COLUMN `walletid` int NULL AFTER `isActive`;
+
+
+--
+INSERT INTO `veninvest_db`.`wallets` (`walletid`, `name`, `isactive`) VALUES (1, 'Deposit Wallet', true);
+INSERT INTO `veninvest_db`.`wallets` (`walletid`, `name`, `isactive`) VALUES (2, 'Interest Wallet', true);
+INSERT INTO `veninvest_db`.`wallets` (`walletid`, `name`, `isactive`) VALUES (3, 'Active Wallet', true);
+
+
+--
+ALTER TABLE `veninvest_db`.`returninterest` 
+CHANGE COLUMN `nextpay` `nextpay` DATETIME NULL DEFAULT NULL ;
+
+
+--
+ALTER TABLE `veninvest_db`.`returninterest` 
+CHANGE COLUMN `payinterest` `payinterest` DECIMAL(10,2) NULL DEFAULT NULL ,
+CHANGE COLUMN `capitalback` `capitalback` DECIMAL(10,2) NULL DEFAULT NULL ,
+CHANGE COLUMN `invest` `invest` DECIMAL(10,2) NULL DEFAULT NULL ;
+
+--
+ALTER TABLE `veninvest_db`.`users` 
+CHANGE COLUMN `depositwallet` `depositwallet` DECIMAL(10,2) NULL DEFAULT NULL ,
+CHANGE COLUMN `activewallet` `activewallet` DECIMAL(10,2) NULL DEFAULT NULL ,
+CHANGE COLUMN `interestwallet` `interestwallet` DECIMAL(10,2) NULL DEFAULT NULL ;
+
+
+--
+ALTER TABLE `veninvest_db`.`returninterest` 
+ADD COLUMN `planname` VARCHAR(145) NULL AFTER `userid`;
+
+
+--
+ALTER TABLE `veninvest_db`.`returninterest` 
+ADD COLUMN `createdon` DATETIME NULL AFTER `isActive`;
+
+
+--
+
+
+
 
  
