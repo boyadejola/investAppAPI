@@ -107,5 +107,92 @@ CREATE TABLE `veninvest_db`.`returninterest` (
  ADD COLUMN `isActive` TINYINT NULL AFTER `nextpay`;
  
  --
- 
+ ALTER TABLE `veninvest_db`.`deposit` 
+ADD COLUMN `userid` INT NOT NULL AFTER `depositid`,
+ADD COLUMN `isactive` TINYINT NOT NULL AFTER `createdon`,
+ADD COLUMN `isapproved` TINYINT NOT NULL AFTER `isactive`;
+
+
+--
+ALTER TABLE `veninvest_db`.`withdraw` 
+ADD COLUMN `userid` INT NULL AFTER `withdrawid`,
+ADD COLUMN `isapproved` TINYINT NOT NULL AFTER `createdon`;
+
+--
+ALTER TABLE `veninvest_db`.`referrals` 
+ADD COLUMN `userid` INT NULL AFTER `createdon`,
+ADD COLUMN `referralto` INT NULL AFTER `userid`;
+
+
+--
+CREATE TABLE `veninvest_db`.`userplans` (
+  `userplanid` INT NOT NULL AUTO_INCREMENT,
+  `userid` INT NULL,
+  `planid` INT NULL,
+  `isactive` TINYINT NULL,
+  PRIMARY KEY (`userplanid`));
+
+
+--
+ALTER TABLE `veninvest_db`.`transaction` 
+ADD COLUMN `userid` INT NULL AFTER `transactionid`;
+
+--
+ALTER TABLE `veninvest_db`.`returninterest` 
+ADD COLUMN `userid` INT NULL AFTER `returninterestid`;
+
+--
+CREATE TABLE `veninvest_db`.`gateways` (
+  `gatewayid` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(145) NOT NULL,
+  `isactive` TINYINT NULL,
+  PRIMARY KEY (`gatewayid`));
+
+
+--
+INSERT INTO `veninvest_db`.`gateways` (`gatewayid`, `name`, `isactive`) VALUES ('1', 'BTC', '1');
+INSERT INTO `veninvest_db`.`gateways` (`gatewayid`, `name`, `isactive`) VALUES ('2', 'USDT', '1');
+
+--
+ALTER TABLE `veninvest_db`.`deposit` 
+CHANGE COLUMN `gateway` `gateway` INT NOT NULL ;
+
+
+--
+ALTER TABLE `veninvest_db`.`deposit` 
+ADD COLUMN `details` VARCHAR(245) NULL AFTER `userid`;
+
+
+--
+ALTER TABLE `veninvest_db`.`users` 
+ADD COLUMN `interestwallet` DECIMAL(10,4) NULL AFTER `activewallet`;
+
+
+--
+ALTER TABLE `veninvest_db`.`plans` 
+ADD COLUMN `ratio` DECIMAL(10,2) NOT NULL AFTER `name`,
+ADD COLUMN `days` INT NOT NULL AFTER `ratio`,
+ADD COLUMN `refcommission` DECIMAL(10,2) NOT NULL AFTER `days`,
+ADD COLUMN `min` DECIMAL(10,2) NULL AFTER `refcommission`,
+ADD COLUMN `max` DECIMAL(10,2) NULL AFTER `min`,
+CHANGE COLUMN `isactive` `isactive` TINYINT(4) NOT NULL ;
+
+--
+INSERT INTO `veninvest_db`.`plans` (`planid`, `name`, `ratio`, `days`, `refcommission`, `min`, `max`, `isactive`) 
+VALUES ('1', 'Starter Plan', '1.8', '7', '10', '100', '25000', true);
+
+INSERT INTO `veninvest_db`.`plans` (`planid`, `name`, `ratio`, `days`, `refcommission`, `min`, `max`, `isactive`) 
+VALUES ('2', 'Evolution Plan', '2', '14', '10', '25000', '50000', true);
+
+INSERT INTO `veninvest_db`.`plans` (`planid`, `name`, `ratio`, `days`, `refcommission`, `min`, `max`, `isactive`) 
+VALUES ('3', 'Standard Plan', '2.5', '30', '10', '50000', '100000', true);
+
+INSERT INTO `veninvest_db`.`plans` (`planid`, `name`, `ratio`, `days`, `refcommission`, `min`, `isactive`) 
+VALUES ('4', 'Pro Plan', '3', '60', '10', '100000', true);
+
+
+
+
+--
+
  
