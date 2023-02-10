@@ -19,7 +19,7 @@ const register = async (req, res) => {
       return res.status(400).json("Please enter complete information")
     }
 
-    const emailalreadyexist = await connectDB.query("select email from users where email = ?", [email]);
+    const emailalreadyexist = await connectDB.query("select email from usersinvest where email = ?", [email]);
     if (emailalreadyexist.length > 0) {
       constants.apiResponse.data = 'Email already in use';
       constants.apiResponse.code = StatusCodes.CONFLICT;
@@ -40,8 +40,7 @@ const register = async (req, res) => {
       new Date(),
       true,
     ];
-    const user = await connectDB.query("insert into users (roleid,firstname,lastname,email,password,btcid,usdtid,createdon,isactive) values (?,?,?,?,?,?,?,?,?)", params);
-    // const result = await connectDB.query("select * from users where email = ?", [email]);
+    const user = await connectDB.query("insert into usersinvest (roleid,firstname,lastname,email,password,btcid,usdtid,createdon,isactive) values (?,?,?,?,?,?,?,?,?)", params);
     res.status(StatusCodes.CREATED).json({ msg: "User has been created" });
   } catch (err) {
     constants.apiResponse.data = 'Server error, check connections';
@@ -62,7 +61,7 @@ const login = async (req, res) => {
     if (!email || !password) {
       return res.status(200).json({ error: 'Please provide email and password' })
     }
-    const userDB = await connectDB.query("select * from users where email = ?", [email]);
+    const userDB = await connectDB.query("select * from usersinvest where email = ?", [email]);
     if (!userDB[0] || (userDB[0] && !userDB[0].isactive) || !userDB.length > 0) {
       return res.status(200).json({ error: !userDB[0] ? 'User not exist' : (userDB[0] && !userDB[0].isactive) ? 'User is not active' : 'There is no email' })
     }
@@ -120,7 +119,7 @@ const updatePassword = async (req, res) => {
         return res.status(StatusCodes.BAD_REQUEST).json(constants.apiResponse);
       }
 
-      const user = await connectDB.query("select * from users where userid = ?", [req.user.userid]);
+      const user = await connectDB.query("select * from usersinvest where userid = ?", [req.user.userid]);
       const isMatch = await bcrypt.compare(oldpassword, user[0].password);
       // //   return isMatch;
       if (!isMatch) {
@@ -132,7 +131,7 @@ const updatePassword = async (req, res) => {
       }
 
       let hashedPassword = await bcrypt.hash(newpassword, 8);
-      const result = await connectDB.query("update users set password = ? where userid = ?", [hashedPassword, req.user.userid]);
+      const result = await connectDB.query("update usersinvest set password = ? where userid = ?", [hashedPassword, req.user.userid]);
       constants.apiResponse.code = StatusCodes.OK;
       constants.apiResponse.msg = 'Password Changed';
       res.status(StatusCodes.OK).json(constants.apiResponse);

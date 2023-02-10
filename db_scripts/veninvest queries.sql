@@ -1,7 +1,7 @@
 CREATE SCHEMA `veninvest_db` ;
 
 --
-CREATE TABLE `veninvest_db`.`users` (
+CREATE TABLE `veninvest_db`.`usersinvest` (
   `userid` INT NOT NULL AUTO_INCREMENT,
   `roleid` INT NOT NULL,
   `firstname` VARCHAR(105) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE `veninvest_db`.`users` (
   PRIMARY KEY (`userid`));
 
 --
-ALTER TABLE `veninvest_db`.`users` 
+ALTER TABLE `veninvest_db`.`usersinvest` 
 ADD COLUMN `createdon` DATETIME NULL AFTER `activewallet`,
 ADD COLUMN `updatedon` DATETIME NULL AFTER `createdon`;
 
@@ -164,7 +164,7 @@ ADD COLUMN `details` VARCHAR(245) NULL AFTER `userid`;
 
 
 --
-ALTER TABLE `veninvest_db`.`users` 
+ALTER TABLE `veninvest_db`.`usersinvest` 
 ADD COLUMN `interestwallet` DECIMAL(10,4) NULL AFTER `activewallet`;
 
 
@@ -235,7 +235,7 @@ CHANGE COLUMN `capitalback` `capitalback` DECIMAL(10,2) NULL DEFAULT NULL ,
 CHANGE COLUMN `invest` `invest` DECIMAL(10,2) NULL DEFAULT NULL ;
 
 --
-ALTER TABLE `veninvest_db`.`users` 
+ALTER TABLE `veninvest_db`.`usersinvest` 
 CHANGE COLUMN `depositwallet` `depositwallet` DECIMAL(10,2) NULL DEFAULT NULL ,
 CHANGE COLUMN `activewallet` `activewallet` DECIMAL(10,2) NULL DEFAULT NULL ,
 CHANGE COLUMN `interestwallet` `interestwallet` DECIMAL(10,2) NULL DEFAULT NULL ;

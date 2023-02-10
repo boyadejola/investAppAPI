@@ -45,7 +45,7 @@ const getleague = async (req, res) => {
     const page = Number(pageno) || 1;
     const skip = (page - 1) * numPerPage;
     const limit = skip + ',' + numPerPage;
-    const league = await connectDB.query(`select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join users u on u.userid = l.createdby where l.isActive = true order by 1 desc limit ${limit}`);
+    const league = await connectDB.query(`select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join usersinvest u on u.userid = l.createdby where l.isActive = true order by 1 desc limit ${limit}`);
     if (league && league.length > 0) {
       constants.apiResponse.data = league;
       constants.apiResponse.code = StatusCodes.OK;
@@ -81,17 +81,17 @@ const getMyLeagues = async (req, res) => {
       if (isManagement) {
         let query = '';
         if (role == data.super_admin) {
-          query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join users u on u.userid = l.createdby where l.isActive = true order by 1 desc limit ${limit}`
+          query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join usersinvest u on u.userid = l.createdby where l.isActive = true order by 1 desc limit ${limit}`
         }
         else if (role == data.admin) {
-          query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join users u on u.userid = l.createdby where l.isActive = true and l.createdby in (select userid from users where roleid in (${data.admin},${data.manager},${data.user})) order by 1 desc limit ${limit}`
+          query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join usersinvest u on u.userid = l.createdby where l.isActive = true and l.createdby in (select userid from usersinvest where roleid in (${data.admin},${data.manager},${data.user})) order by 1 desc limit ${limit}`
         }
         else if (role == data.manager) {
-          query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join users u on u.userid = l.createdby where l.isActive = true and l.createdby = ${userid} order by 1 desc limit ${limit}`
+          query = `select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname from leagues l left join usersinvest u on u.userid = l.createdby where l.isActive = true and l.createdby = ${userid} order by 1 desc limit ${limit}`
         }
         dbData = await connectDB.query(query);
       } else {
-        dbData = await connectDB.query(`select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname, l.createdby from leagues l left join userleagues ul on ul.leagueid = l.leagueid left join users u on u.userid = ul.userid where l.isActive = true and ul.userid = ${userid} order by 1 desc limit ${limit}`);
+        dbData = await connectDB.query(`select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname, l.createdby from leagues l left join userleagues ul on ul.leagueid = l.leagueid left join usersinvest u on u.userid = ul.userid where l.isActive = true and ul.userid = ${userid} order by 1 desc limit ${limit}`);
       }
       if (dbData && dbData.length > 0) {
         const unique = [...new Set(dbData.map(x => x.leagueid))];
@@ -134,7 +134,7 @@ const getLeaguePlayers = async (req, res) => {
     const skip = (page - 1) * numPerPage;
     const limit = skip + ',' + numPerPage;
     if ((role == data.super_admin || role == data.admin || role == data.manager) && leagueId > 0) {
-      const dbData = await connectDB.query(`select l.leagueid, l.leaguename, u.userid, u.userfirstname, u.userlastname, u.roleid, u.email, ul.createdon as leaguejoineddate from users u inner join userleagues ul on ul.userid = u.userid inner join leagues l on l.leagueid = ul.leagueid where l.leagueid = ${leagueId} and ul.isactive = true order by 1 desc limit ${limit}`);
+      const dbData = await connectDB.query(`select l.leagueid, l.leaguename, u.userid, u.userfirstname, u.userlastname, u.roleid, u.email, ul.createdon as leaguejoineddate from usersinvest u inner join userleagues ul on ul.userid = u.userid inner join leagues l on l.leagueid = ul.leagueid where l.leagueid = ${leagueId} and ul.isactive = true order by 1 desc limit ${limit}`);
       if (dbData && dbData.length > 0) {
         const unique = [...new Set(dbData.map(x => x.userid))];
         constants.apiResponse.code = StatusCodes.OK;
@@ -307,7 +307,7 @@ const getMyJoinedLeagues = async (req, res) => {
     const skip = (page - 1) * numPerPage;
     const limit = skip + ',' + numPerPage;
     if (role > 0 && userid > 0) {
-      let dbData = await connectDB.query(`select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname, l.createdby from leagues l left join userleagues ul on ul.leagueid = l.leagueid left join users u on u.userid = ul.userid where l.isActive = true and ul.userid = ${userid} order by 1 desc limit ${limit}`);
+      let dbData = await connectDB.query(`select l.leagueid, l.leaguename, l.customid, u.userfirstname, u.userlastname, l.createdby from leagues l left join userleagues ul on ul.leagueid = l.leagueid left join usersinvest u on u.userid = ul.userid where l.isActive = true and ul.userid = ${userid} order by 1 desc limit ${limit}`);
       if (dbData && dbData.length > 0) {
         const unique = [...new Set(dbData.map(x => x.leagueid))];
         constants.apiResponse.code = StatusCodes.OK;

@@ -171,7 +171,7 @@ const depostToApprove = async (req, res) => {
         const limit = skip + ',' + numPerPage;
         let depositHistory = []
         if (userid && role && (role == roles.super_admin || role == roles.admin)) {
-            depositHistory = await connectDB.query(`select d.*, u.firstname, u.lastname from deposit d inner join users u on u.userid = d.userid where d.isActive = true and d.isapproved=false order by d.depositid desc limit ${limit}`);
+            depositHistory = await connectDB.query(`select d.*, u.firstname, u.lastname from deposit d inner join usersinvest u on u.userid = d.userid where d.isActive = true and d.isapproved=false order by d.depositid desc limit ${limit}`);
         }
         constants.apiResponse.code = StatusCodes.OK;
         constants.apiResponse.totalCount = depositHistory && depositHistory.length > 0 ? depositHistory.length : 0;
@@ -202,7 +202,7 @@ const withdrawToApprove = async (req, res) => {
         const limit = skip + ',' + numPerPage;
         let depositHistory = []
         if (userid && role && (role == roles.super_admin || role == roles.admin)) {
-            depositHistory = await connectDB.query(`select w.*, u.firstname, u.lastname from withdraw w inner join users u on u.userid = w.userid where w.isActive = true and w.isapproved=false order by w.withdrawid desc limit ${limit}`);
+            depositHistory = await connectDB.query(`select w.*, u.firstname, u.lastname from withdraw w inner join usersinvest u on u.userid = w.userid where w.isActive = true and w.isapproved=false order by w.withdrawid desc limit ${limit}`);
         }
         constants.apiResponse.code = StatusCodes.OK;
         constants.apiResponse.totalCount = depositHistory && depositHistory.length > 0 ? depositHistory.length : 0;
@@ -235,7 +235,7 @@ const getDashboard = async (req, res) => {
             totalpayout: 0,
         };
         if (userid) {
-            const user = await connectDB.query(`select * from users where userid = ${userid}`);
+            const user = await connectDB.query(`select * from usersinvest where userid = ${userid}`);
             if (user && user.length > 0) {
                 dashboard.depositwallet = user[0].depositwallet;
                 dashboard.activewallet = user[0].activewallet;

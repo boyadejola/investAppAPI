@@ -43,7 +43,7 @@ const postWithdraw = async (req, res) => {
     const { id, details, gateway, amount } = req.body;
     if (userid && details && gateway && amount) {
 
-      // const checkamount = await connectDB.query(`select * from users where interestwallet`);
+      // const checkamount = await connectDB.query(`select * from usersinvest where interestwallet`);
       // ISME KAFI CHECKS HAIN LIKE AMOUNT CHECK
 
       // const insertQuery = `INSERT INTO deposit (userid, details, gateway, amount, status, createdon, isactive, isapproved) 
@@ -76,7 +76,7 @@ const approveDeposit = async (req, res) => {
       const getdep = await connectDB.query(`select * from deposit where depositid = ${id}`);
       if (getdep && getdep.length > 0) {
         let data = await connectDB.query(`update deposit set isapproved = true where depositid = ${id}`);
-        let datsa = await connectDB.query(`UPDATE users SET depositwallet = ${getdep[0].amount} WHERE (userid = ${getdep[0].userid})`);
+        let datsa = await connectDB.query(`UPDATE usersinvest SET depositwallet = ${getdep[0].amount} WHERE (userid = ${getdep[0].userid})`);
         constants.apiResponse.code = StatusCodes.OK;
         constants.apiResponse.data = 'Deposit is Successfully approved';
         constants.apiResponse.msg = 'Deposit is Successfully approved';
@@ -132,7 +132,7 @@ const joinplan = async (req, res) => {
     const { id, amount, wallet } = req.body;
     if (id && amount && wallet) {
       const getwith = await connectDB.query(`select * from plans where planid=${id}`);
-      const userDB = await connectDB.query(`select * from users where userid=${userid}`);
+      const userDB = await connectDB.query(`select * from usersinvest where userid=${userid}`);
       if (getwith && getwith.length > 0 && userDB && userDB.length > 0) {
         let data = getwith[0];
         let user = userDB[0];
@@ -160,7 +160,7 @@ const joinplan = async (req, res) => {
             VALUES (${userid}, ${parseFloat(amount)}, ${remains}, '${data.name} Selected', now(), true, ${wallet})`);
           const insertROI = await connectDB.query(`INSERT INTO returninterest (userid, planname, payinterest, period, capitalback, invest, status, isActive) 
             VALUES (${userid}, '${data.name}', ${data.ratio}, '${data.days} days', ${capitalbck}, ${amount}, 'In Progress', true)`);
-          const updateUser = await connectDB.query(`UPDATE users 
+          const updateUser = await connectDB.query(`UPDATE usersinvest 
             SET ${wallet == constants.userWallets.deposit ? "depositwallet" : "interestwallet"} = ${remains} WHERE (userid = ${userid})`);
           constants.apiResponse.code = StatusCodes.OK;
           constants.apiResponse.data = 'Plan choosen successfully';
