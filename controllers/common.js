@@ -16,7 +16,7 @@ const postDeposit = async (req, res) => {
     const { id, details, gateway, amount } = req.body;
     if (userid && details && gateway && amount) {
       const insertQuery = `INSERT INTO deposit (userid, details, gateway, amount, status, createdon, isactive, isapproved) 
-      VALUES (${userid}, '${details}', '${gateway}', ${amount}, 'false', now(), true, false)`;
+      VALUES (${userid}, '${details}', '${gateway}', ${amount}, 'Deposited', now(), true, false)`;
       const rews = await connectDB.query(insertQuery);
       constants.apiResponse.code = StatusCodes.OK;
       constants.apiResponse.data = 'Successfully deposited, kindly wait for approval';
@@ -43,7 +43,7 @@ const postWithdraw = async (req, res) => {
     const { id, details, gateway, amount } = req.body;
     if (userid && details && gateway && amount) {
 
-      // const checkamount = await connectDB.query(`select * from returninterest where`);
+      // const checkamount = await connectDB.query(`select * from users where interestwallet`);
       // ISME KAFI CHECKS HAIN LIKE AMOUNT CHECK
 
       // const insertQuery = `INSERT INTO deposit (userid, details, gateway, amount, status, createdon, isactive, isapproved) 

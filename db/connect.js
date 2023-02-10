@@ -1,11 +1,11 @@
 const mariadb = require('mariadb');
 
 const connectDB = mariadb.createPool({
-  port: 3307,//process.env.DB_PORT,
-  host: 'localhost',//process.env.DB_HOST,
-  user: 'root',//process.env.DB_USER,
-  password: '12345',//process.env.DB_PASS,
-  database: 'veninvest_db',//process.env.DB_NAME,
+  port: process.env.DB_PORT,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
   connectionLimit: 5,
   multipleStatements: true
 });
