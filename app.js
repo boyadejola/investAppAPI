@@ -77,7 +77,7 @@ app.use(errorMiddleware)
 //     res.status(500).send({msg:'something went wrong'})
 // })
 
-const port = 3000 || process.env.PORT;
+const port = 5000 || process.env.PORT;
 
 const start = async () => {
     try {
