@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require("body-parser")
 
 
-// const connectDB = require('./db/connect')
+const connectDB = require('./db/connect')
 
 //routers
 const test = require('./routes/test')
@@ -29,16 +29,16 @@ const corsConfig = {
     origin: true,
 };
 app.use(cors(corsConfig));
-// app.use(cors());
-// app.use(cors({credentials: true, origin: 'http://localhost:3001'}));
-// app.use((req,res,next)=>{
-//     res.header('Access-Control-Allow-Headers, http://localhost:3001, Access-Control-Allow-Origin', 'Origin, X-Requested-with, Content_Type,Accept,Authorization','http://localhost:3001');
-//     if(req.method === 'OPTIONS') {
-//         res.header('Access-Control-Allow-Methods','PUT,POST,PATCH,DELETE,GET');
-//         return res.status(200).json({});
-//     }
-//     next();
-// });
+app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:5000'}));
+app.use((req,res,next)=>{
+    res.header('Access-Control-Allow-Headers, http://localhost:5000, Access-Control-Allow-Origin', 'Origin, X-Requested-with, Content_Type,Accept,Authorization','http://localhost:3001');
+    if(req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods','PUT,POST,PATCH,DELETE,GET');
+        return res.status(200).json({});
+    }
+    next();
+});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
@@ -73,21 +73,25 @@ app.use('/api/v1/common', common)
 app.use(notFoundMiddleware)
 app.use(errorMiddleware)
 
-// app.use(function(err,req,res,next){
-//     res.status(500).send({msg:'something went wrong'})
-// })
+app.use(function(err,req,res,next){
+    res.status(500).send({msg:'something went wrong'})
+})
 
 const port = 5000 || process.env.PORT;
 
 const start = async () => {
     try {
-        app.listen(port, () => {
+        app.listen(port, async () => {
+            await connectDB.getConnection()
+            
             console.log(`Server is listening to the ${port}`)
         })
         // return;
-
-    } catch (error) {
-        console.log(`app.js --> ${error}`)
+        
+    } 
+   
+    catch (error) {
+        console.error(`app.js --> ${error}`)
         // return;
     }
 }

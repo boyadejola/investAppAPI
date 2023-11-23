@@ -1,4 +1,7 @@
+const env = require("dotenv");
 const mariadb = require('mariadb');
+
+env.config()
 
 const connectDB = mariadb.createPool({
   port: process.env.DB_PORT,
@@ -11,8 +14,10 @@ const connectDB = mariadb.createPool({
 });
 
 // Connect and check for errors
-connectDB.getConnection((err, connection) => {
+connectDB.getConnection( async (err, connection) => {
   console('yahooooo from connect DB');
+const result = await connectDB.query("SELECT * FROM veninvest_db")
+console.log(result)
   if (err) {
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
       console.error('Database connection lost');
