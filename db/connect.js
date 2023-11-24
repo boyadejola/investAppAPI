@@ -16,7 +16,7 @@ const connectDB = mariadb.createPool({
 // Connect and check for errors
 connectDB.getConnection( async (err, connection) => {
   console('yahooooo from connect DB');
-const result = await connectDB.query("SELECT * FROM veninvest_db")
+const result = await connectDB.query("SELECT * FROM veninvest_db.usersinvest")
 console.log(result)
   if (err) {
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {

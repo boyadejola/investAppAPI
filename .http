@@ -1,0 +1,16 @@
+GET    http://localhost:5000/api/v1/users HTTP/1.1
+# POST    http://localhost:5000/api/v1/auth/register HTTP/1.1
+# POST    http://localhost:5000/api/v1/auth/register HTTP/1.1
+
+content-type: application/json
+
+# {
+#    "email" :"olanipekunoladapo12@gmail.com",
+#  "password":"lkjhgfdsa",
+
+# }
+
+#   "firstName":"mrjohn", 
+#   "lastName":"plug",
+#    "btcWallet":"qwerty234567ghjtrertyu",
+#     "usdtWallet":"qwertyuiojhgfd567nbn"

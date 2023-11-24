@@ -46,15 +46,15 @@ app.use(cookieParser(process.env.JWT_SECRET));
 
 ///app.use(morgan('tiny'))
 
-// app.use(express.static(__dirname + '/frontend'))
+app.use(express.static('build'))
 
 
-// app.get('/*', (req, res) => {
-//     res.sendFile(__dirname + `${req && req.url && req.url.includes('api') ? "" : "/frontend/index.html"}`);
-//     return;
-// })
+app.get('/*', (req, res) => {
+    res.sendFile(__dirname + `${req && req.url && req.url.includes('api') ? "" : "/build/index.html"}`);
+    return;
+})
 
-// app.get('/', (req, res) => {
+// app.get('/api/user', (req, res) => {
 //     res.send('hello zombie app is running')
 //     res.send('hello')
 // })
@@ -82,8 +82,9 @@ const port = 5000 || process.env.PORT;
 const start = async () => {
     try {
         app.listen(port, async () => {
-            await connectDB.getConnection()
-            
+            // const result = await connectDB.query("SELECT * FROM veninvest_db.usersinvest")
+            // const row = [result]
+            // console.log(row)
             console.log(`Server is listening to the ${port}`)
         })
         // return;
