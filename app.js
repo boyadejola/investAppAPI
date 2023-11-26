@@ -54,10 +54,13 @@ app.get('/*', (req, res) => {
     return;
 })
 
-// app.get('/api/user', (req, res) => {
-//     res.send('hello zombie app is running')
-//     res.send('hello')
-// })
+app.get('/api/user', async (req, res) => {
+ 
+   
+      const result = await connectDB.query("SELECT * FROM veninvest_db.usersinvest")
+            
+            return res.json(result)
+})
 
 
 //controllers
